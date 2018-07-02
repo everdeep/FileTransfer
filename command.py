@@ -39,6 +39,10 @@ class StopServerCommand(Command):
     def execute(self, args):
         self._obj.stop_server(args)
 
+class SendDataCommand(Command):
+    """ The COMMAND for sending data to server """
+    def execute(self, args):
+        self._obj.send_data(args)
 
 class BrowseFilesCommand(Command):
     """ The COMMAND for browsing files """
@@ -72,16 +76,18 @@ class CommandCenter(object):
 
 
     def execute(self, cmd, *args):
-        cmd = cmd.strip().upper()
-        if cmd == '1':
-            self._history.execute(StartServerCommand(self._server), args)
-        elif cmd == '2':
+        cmd = cmd.strip()
+        if cmd == '00':
+            return self._history.execute(StartServerCommand(self._server), args)
+        elif cmd == '01':
             self._history.execute(StopServerCommand(self._server), args)
-        elif cmd == '3':
+        elif cmd == '02':
+            self._history.execute(SendDataCommand(self._server), args)
+        elif cmd == '10':
             self._history.execute(BrowseFilesCommand(self._files), args)
-        elif cmd == '4':
+        elif cmd == '11':
             self._history.execute(TransferFilesCommand(self._files), args)
-        elif cmd == '5':
+        elif cmd == '12':
             self._history.execute(RemoveFilesCommand(self._files), args)
         else:
             print("Invalid command.")

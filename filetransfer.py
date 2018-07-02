@@ -1,3 +1,4 @@
+import command
 from multiprocessing import Process
 from tkinter import *
 from tkinter import messagebox
@@ -5,7 +6,6 @@ from tkinter import filedialog
 
 class FileTransfer(object):
     """ The Receiver class """
-
     def __transfer(self, load_path, save_path, obj):
         """
         Each file transfer creates a new connection
@@ -15,43 +15,12 @@ class FileTransfer(object):
         """
         try:
             # grabs the host and port from the server details
-            host = obj.host.get(1.0, END).strip()
-            port = int(obj.port.get(1.0, END))
-            # sock = connect_to_server(host, port)
-            #self.__send_data(sock, load_path, save_path)
-            # sock.close()
-            print('sending file')
+            host = obj.textbox_ip.get(1.0, END).strip()
+            # Send file
+            _command = command.CommandCenter()
+            _command.execute('02', host, load_path, save_path)
         except Exception as e:
-            messagebox.showinfo("Error",
-                                'Please check your host and port details or ensure the server is running.\n\nHost: '
-                                '%s\nPort: %s\n '
-                                % (host, port)
-                                )
-            print('Error:', e)
-
-
-    @staticmethod
-    def __send_data(sock, load_path, save_path):
-        if save_path[-1] != '/':
-            save_path += '/'
-        try:
-            pass
-            # data = open(load_path, 'rb').read()
-            # name = load_path.split('/')[-1]
-            # print('Sending file', name)
-            # # Server command
-            # sock.sendall(b'1')
-            # time.sleep(0.1)
-            # # Send the filename
-            # sock.sendall(name.encode('utf-8'))
-            # time.sleep(0.1)
-            # # Send the path to copy to
-            # sock.sendall(save_path.encode('utf-8'))
-            # time.sleep(0.1)
-            # # Send the file
-            # sock.sendall(data)
-            # time.sleep(0.1)
-        except Exception as e:
+            messagebox.showinfo("Error", 'Please check your host details or ensure the destination client.')
             print('Error:', e)
 
 
@@ -71,6 +40,7 @@ class FileTransfer(object):
         for name in names:
             if name not in obj.listbox.get(0, END):
                 obj.listbox.insert(END, name)
+
 
     def transfer(self, args):
         """

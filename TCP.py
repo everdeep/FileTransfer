@@ -1,3 +1,4 @@
+import os
 import socket
 import threading
 from socketserver import ThreadingMixIn, TCPServer, BaseRequestHandler
@@ -22,12 +23,28 @@ class TCPHandler(BaseRequestHandler):
         # self.request is the TCP socket connected to the client
         cur_thread = threading.current_thread()
         print('Thread %s receiving from %s.' % (cur_thread.name, self.client_address[0]))
-        # Determine what the client is sending
-        self.data = self.request.recv(1024).decode().split(',')
-        print('data:', self.data)
-        self.command_menu(self.data[0])
-        print('Thread %s finished receiving from %s.' % (cur_thread.name, self.client_address[0]))
 
-    def command_menu(self, command):
-        """ This handles receiving different requests from clients. """
-        print(command)
+        try:
+            # Receiving the name of the file
+            filename = self.request.recv(1024).decode('utf-8')
+            # Receiving the directory to write the file to
+            directory = self.request.recv(1024).decode('utf-8')
+            
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Receiving the file itself
+            length = 0
+            with open(directory + filename, 'wb') as f:
+                while True:
+                    self.data = self.request.recv(4096)
+                    length += len(self.data)
+                    if not self.data:
+                        break
+                    f.write(self.data)
+                print('Wrote %s bytes to %s%s' % (length, directory, filename))
+        except BrokenPipeError as e:
+            print('! Error handling request from %s.' % self.client_address[0])
+            self.request.sendall('Server: There was an processing your file')
+
+        print('Thread %s finished receiving from %s.' % (cur_thread.name, self.client_address[0]))
