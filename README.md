@@ -9,3 +9,6 @@ You then need to enter a directory for where you want the files to be saved. It 
 this and instead allow the other client to choose where to store it. The current method requires you knowing
 the direct path and does not check if a folder or files have the same name as the files you are going to send,
 and so it is possible that they will be overwritten.
+
+
+![picture alt](https://preview.ibb.co/nszAhJ/Screen_Shot_2018_07_03_at_12_42_38_am.png "File Transfer App")
