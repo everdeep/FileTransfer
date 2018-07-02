@@ -81,3 +81,4 @@ class Server(object):
             print('file sent')
         except Exception as e:
             print('Error:', e)
+            print('! [ exception caught on line 82 of server.py ]')

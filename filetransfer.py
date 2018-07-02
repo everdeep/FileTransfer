@@ -22,6 +22,7 @@ class FileTransfer(object):
         except Exception as e:
             messagebox.showinfo("Error", 'Please check your host details or ensure the destination client.')
             print('Error:', e)
+            print('! [ exception caught on line 22 of filetransfer.py ]')
 
 
     def browse(self, args):

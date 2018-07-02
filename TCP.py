@@ -29,7 +29,7 @@ class TCPHandler(BaseRequestHandler):
             filename = self.request.recv(1024).decode('utf-8')
             # Receiving the directory to write the file to
             directory = self.request.recv(1024).decode('utf-8')
-            
+
             if not os.path.exists(directory):
                 os.makedirs(directory)
 
@@ -45,6 +45,7 @@ class TCPHandler(BaseRequestHandler):
                 print('Wrote %s bytes to %s%s' % (length, directory, filename))
         except BrokenPipeError as e:
             print('! Error handling request from %s.' % self.client_address[0])
+            print('! [ exception caught on line 46 of TCP.py ]')
             self.request.sendall('Server: There was an processing your file')
 
         print('Thread %s finished receiving from %s.' % (cur_thread.name, self.client_address[0]))
